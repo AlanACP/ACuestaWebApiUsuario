@@ -1,0 +1,137 @@
+﻿@model ML.Usuario
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    @if (Model.IdUsuario != 0)
+    {
+        <h2>Actualizar</h2>
+    }
+    else
+    {
+        <h2>Agregar</h2>
+    }
+</div>
+
+
+@using (Html.BeginForm("Form", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <form>
+        <div class="container">
+            <div class="row">
+                <div class="col-4">
+                    @Html.HiddenFor(model => model.IdUsuario)
+
+                    @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @onkeyup = "SoloLetras(this, 'lblNombre')" })
+                    <label id="lblNombre" class="text-danger">@Html.ValidationMessageFor(model => model.Nombre)</label>
+                    <br />
+
+                    @Html.LabelFor(model => model.ApellidoPaterno, new { @class = "form-label", @style = "margin-top: 10px;" })
+                    @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control", @onkeyup = "SoloLetras(this, 'lblApellidoPaterno')" })
+                    <label id="lblApellidoPaterno" class="text-danger">@Html.ValidationMessageFor(model => model.ApellidoPaterno)</label>
+                    <br />
+
+                    @Html.LabelFor(model => model.ApellidoMaterno, new { @class = "form-label", @style = "margin-top: 10px;" })
+                    @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control", @onkeyup = "SoloLetras(this, 'lblApellidoMaterno')" })
+                    <label id="lblApellidoMaterno" class="text-danger">@Html.ValidationMessageFor(model => model.ApellidoMaterno)</label>
+                </div>
+                <div class="col-4">
+                    @Html.LabelFor(model => model.Edad, new { @class = "form-label" })
+                    @Html.TextBoxFor(model => model.Edad, new { @class = "form-control", @onkeyup = "SoloNumeros(this, 'lblEdad')", @placeholder  = ""})
+                    <label id="lblEdad" class="text-danger">@Html.ValidationMessageFor(model => model.Edad)</label>
+                    <br />
+
+                    @Html.LabelFor(model => model.Email, new { @class = "form-label", @style = "margin-top: 10px;" })
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @onblur = "ValidarEmail(this, 'lblEmail')" })
+                    <label id="lblEmail" class="text-danger">@Html.ValidationMessageFor(model => model.Email) </label>
+                </div>
+                <div class="col-4">
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-2" style="margin-top: 15px;">
+                    @if (Model.IdUsuario != 0)
+                    {
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </form>
+}
+
+@Scripts.Render("~/bundles/jquery")
+<script>
+    function SoloLetras(input, label) {
+        var valor = $(input).val();
+        var regex = /^[a-zA-Z ]+$/
+
+        if (valor == "") {
+            $(input).removeClass('is-invalid');
+            $('#' + label).text("");
+        } else {
+            if (regex.test(valor)) {
+                $(input).removeClass('is-invalid');
+                $('#' + label).text("");
+            }
+            else {
+                $(input).addClass('is-invalid');
+                $('#' + label).text("Solo puedes ingresar letras");
+                valor = valor.substring(0, valor.length - 1);
+                $(input).val(valor);
+            }
+        }
+    }
+
+    function SoloNumeros(input, label) {
+        var valor = $(input).val();
+        var regex = /^[0-9,$]*$/
+
+        if (valor == "") {
+            $(input).removeClass('is-invalid');
+            $('#' + label).text("");
+        } else {
+            if (regex.test(valor)) {
+                $(input).removeClass('is-invalid');
+                $('#' + label).text("");
+            }
+            else {
+                $(input).addClass('is-invalid');
+                $('#' + label).text("Solo puedes ingresar numeros");
+                valor = valor.substring(0, valor.length - 1);
+                $(input).val(valor);
+            }
+        }
+    }
+
+    function ValidarEmail(input, label) {
+
+        var valor = $(input).val();
+        var regex = /^[^@@\s]+@@[^@@\s]+\.(com|net|org|gov)$/
+
+        if (valor == "") {
+            $(input).removeClass('is-invalid');
+            $('#' + label).text("");
+        } else {
+            if (regex.test(valor)) {
+                $(input).removeClass('is-invalid');
+                $('#' + label).text("");
+            }
+            else {
+                $(input).addClass('is-invalid');
+                $('#' + label).text("Correo invalida");
+            }
+        }
+    }
+</script>
+
